@@ -1,0 +1,126 @@
+# Rifa Web (1 al 100) con MongoDB
+
+Aplicación web para gestionar una rifa: cuadrícula de números del 1 al 100,
+selección de número con registro de datos opcionales, y marcado automático
+de "apartado" guardado en MongoDB.
+
+## Estructura del proyecto
+
+```
+rifa-app/
+├── server.js              # Servidor Express
+├── seed.js                # Inicializa los numeros 1-100 en la base de datos
+├── models/
+│   └── RaffleNumber.js    # Esquema de Mongoose
+├── routes/
+│   ├── numbers.js         # API publica: listar y seleccionar numeros
+│   └── admin.js           # API protegida: ver participantes
+├── public/
+│   ├── index.html
+│   ├── style.css
+│   └── script.js
+├── package.json
+└── .env.example
+```
+
+## 1. Requisitos
+
+- Node.js 18 o superior
+- Una base de datos MongoDB. Dos opciones:
+  - **Local**: instalar MongoDB Community Server en tu computadora.
+  - **En la nube (recomendado, gratis)**: crear un cluster gratuito en
+    [MongoDB Atlas](https://www.mongodb.com/cloud/atlas/register).
+
+## 2. Instalación
+
+```bash
+cd rifa-app
+npm install
+```
+
+## 3. Configuración
+
+Copia el archivo de ejemplo y edítalo con tu cadena de conexión real:
+
+```bash
+cp .env.example .env
+```
+
+Edita `.env`:
+
+```
+MONGODB_URI=mongodb+srv://usuario:password@cluster0.xxxxx.mongodb.net/rifa?retryWrites=true&w=majority
+PORT=3000
+TOTAL_NUMBERS=100
+ADMIN_KEY=elige-una-clave-secreta
+```
+
+> Si usas MongoDB local, deja: `MONGODB_URI=mongodb://127.0.0.1:27017/rifa`
+
+`ADMIN_KEY` es la clave que usarás para consultar la lista de participantes
+con sus datos personales (ver sección 6).
+
+## 4. Ejecutar
+
+```bash
+npm start
+```
+
+Veras en la consola:
+
+```
+Conectado a MongoDB correctamente.
+Numeros del 1 al 100 listos en la base de datos.
+Servidor corriendo en http://localhost:3000
+```
+
+Abre tu navegador en **http://localhost:3000**
+
+El servidor crea automáticamente los 100 números en la base de datos la
+primera vez que arranca (no borra datos existentes en arranques posteriores).
+
+## 5. Cómo funciona
+
+- La cuadrícula muestra los números 1-100 como "boletos".
+- Al hacer clic en un número disponible, se abre un formulario opcional
+  (nombre, correo, teléfono, notas).
+- Al confirmar, se envía una petición `POST /api/numbers/:numero/select`.
+- El servidor usa una actualización **atómica** en MongoDB
+  (`findOneAndUpdate` con condición `taken: false`), así que si dos personas
+  hacen clic en el mismo número casi al mismo tiempo, solo la primera lo
+  obtiene y la segunda recibe un aviso de que ya fue tomado.
+- El número queda marcado visualmente como "APARTADO" para todos los que
+  visiten la página (se actualiza al recargar o pulsar "Actualizar").
+
+## 6. Ver los participantes (administrador)
+
+Para consultar la lista completa con los datos personales de quienes ya
+apartaron un número, visita en el navegador:
+
+```
+http://localhost:3000/api/admin/participants?key=TU_ADMIN_KEY
+```
+
+Reemplaza `TU_ADMIN_KEY` por el valor que pusiste en `.env`. Esto devuelve
+un JSON con todos los números tomados y sus datos.
+
+## 7. Despliegue en internet (opcional)
+
+Puedes subir este proyecto a servicios como Render, Railway o Fly.io:
+
+1. Sube el código a un repositorio de GitHub.
+2. Crea un servicio "Web Service" en la plataforma elegida, apuntando a
+   este repositorio.
+3. Configura las variables de entorno (`MONGODB_URI`, `PORT`, `TOTAL_NUMBERS`,
+   `ADMIN_KEY`) en el panel de esa plataforma (usa tu cadena de Atlas).
+4. Comando de inicio: `npm start`.
+
+## 8. Notas de seguridad
+
+- Los datos personales solo se guardan si el usuario decide llenarlos;
+  el número puede apartarse dejando todos los campos vacíos.
+- La ruta pública `/api/numbers` **no** expone nombres, correos ni
+  teléfonos — solo el número y si está tomado. Los datos personales solo
+  son visibles a través de la ruta protegida de administrador.
+- Cambia `ADMIN_KEY` por una clave larga y única antes de usar esto en
+  producción, y evita compartir el enlace de administrador públicamente.

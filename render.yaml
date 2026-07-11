@@ -1,0 +1,16 @@
+# Blueprint de Render: permite crear el servicio automaticamente
+# desde este repositorio (New + -> Blueprint en render.com)
+services:
+  - type: web
+    name: rifa-app
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: MONGODB_URI
+        sync: false
+      - key: TOTAL_NUMBERS
+        value: "100"
+      - key: ADMIN_KEY
+        sync: false
