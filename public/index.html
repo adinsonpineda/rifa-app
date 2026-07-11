@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Rifa &mdash; Elige tu número</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div class="ticket-header">
+    <div class="ticket-header__inner">
+      <div class="ticket-header__eyebrow">BOLETO OFICIAL &middot; No transferible</div>
+      <h1 class="ticket-header__title">RIFA</h1>
+      <p class="ticket-header__subtitle">Elige un número disponible, regístrate (opcional) y separa tu boleto.</p>
+
+      <div class="stub-row" id="statsRow">
+        <div class="stub">
+          <span class="stub__value" id="statAvailable">&mdash;</span>
+          <span class="stub__label">Disponibles</span>
+        </div>
+        <div class="stub__divider" aria-hidden="true">&#9866;</div>
+        <div class="stub">
+          <span class="stub__value" id="statTaken">&mdash;</span>
+          <span class="stub__label">Apartados</span>
+        </div>
+        <div class="stub__divider" aria-hidden="true">&#9866;</div>
+        <div class="stub">
+          <span class="stub__value" id="statTotal">&mdash;</span>
+          <span class="stub__label">Total</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <main class="board-wrap">
+    <div class="board-toolbar">
+      <p id="statusMessage" class="status-message" role="status" aria-live="polite"></p>
+      <button id="refreshBtn" class="ghost-btn" type="button">Actualizar</button>
+    </div>
+
+    <div id="board" class="board" aria-label="Cuadrícula de números de la rifa">
+      <!-- Los 100 tickets se generan por JavaScript -->
+    </div>
+  </main>
+
+  <footer class="page-footer">
+    <p>Los datos son opcionales y solo se usan para identificar al ganador del boleto.</p>
+  </footer>
+
+  <!-- Modal de registro -->
+  <div id="modalOverlay" class="modal-overlay" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <button class="modal__close" id="modalClose" type="button" aria-label="Cerrar">&times;</button>
+
+      <div class="modal__ticket-number">
+        <span class="modal__hash">N&deg;</span><span id="modalNumber">00</span>
+      </div>
+      <h2 id="modalTitle" class="modal__title">Apartar este número</h2>
+      <p class="modal__hint">Tus datos son opcionales. Puedes apartar el número sin llenarlos.</p>
+
+      <form id="registerForm" class="modal__form">
+        <label class="field">
+          <span>Nombre</span>
+          <input type="text" id="fieldName" name="name" placeholder="Nombre completo" autocomplete="name" />
+        </label>
+        <label class="field">
+          <span>Correo</span>
+          <input type="email" id="fieldEmail" name="email" placeholder="correo@ejemplo.com" autocomplete="email" />
+        </label>
+        <label class="field">
+          <span>Teléfono</span>
+          <input type="tel" id="fieldPhone" name="phone" placeholder="Número de contacto" autocomplete="tel" />
+        </label>
+        <label class="field">
+          <span>Notas</span>
+          <input type="text" id="fieldNotes" name="notes" placeholder="Opcional" />
+        </label>
+
+        <p id="modalError" class="modal__error" hidden></p>
+
+        <div class="modal__actions">
+          <button type="button" id="cancelBtn" class="ghost-btn">Cancelar</button>
+          <button type="submit" id="confirmBtn" class="primary-btn">Confirmar y apartar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+<script src="script.js"></script>
+</body>
+</html>
