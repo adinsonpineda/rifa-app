@@ -8,8 +8,16 @@ services:
     buildCommand: npm install
     startCommand: npm start
     envVars:
-      - key: MONGODB_URI
+      # Recomendado: usa estas 3 variables separadas en vez de MONGODB_URI
+      # para evitar errores de copiado/pegado con la cadena completa.
+      - key: MONGODB_USER
         sync: false
+      - key: MONGODB_PASSWORD
+        sync: false
+      - key: MONGODB_HOST
+        sync: false
+      - key: MONGODB_DB
+        value: rifa
       - key: TOTAL_NUMBERS
         value: "100"
       - key: ADMIN_KEY

@@ -5,13 +5,17 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
 const RaffleNumber = require('./models/RaffleNumber');
+const { buildMongoUri } = require('./config/mongoUri');
 
 const TOTAL_NUMBERS = parseInt(process.env.TOTAL_NUMBERS || '100', 10);
 
 async function seed() {
-  const uri = process.env.MONGODB_URI;
+  const uri = buildMongoUri();
   if (!uri) {
-    console.error('Falta la variable de entorno MONGODB_URI. Revisa tu archivo .env');
+    console.error(
+      'Falta la configuracion de MongoDB. Define MONGODB_URI, o bien ' +
+        'MONGODB_USER + MONGODB_PASSWORD + MONGODB_HOST. Revisa tu archivo .env'
+    );
     process.exit(1);
   }
 

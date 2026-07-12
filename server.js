@@ -7,14 +7,18 @@ const mongoose = require('mongoose');
 const numbersRouter = require('./routes/numbers');
 const adminRouter = require('./routes/admin');
 const RaffleNumber = require('./models/RaffleNumber');
+const { buildMongoUri } = require('./config/mongoUri');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const MONGODB_URI = process.env.MONGODB_URI;
+const MONGODB_URI = buildMongoUri();
 const TOTAL_NUMBERS = parseInt(process.env.TOTAL_NUMBERS || '100', 10);
 
 if (!MONGODB_URI) {
-  console.error('ERROR: Falta la variable de entorno MONGODB_URI. Revisa tu archivo .env');
+  console.error(
+    'ERROR: Falta la configuracion de MongoDB. Define MONGODB_URI, o bien ' +
+      'MONGODB_USER + MONGODB_PASSWORD + MONGODB_HOST. Revisa tu archivo .env'
+  );
   process.exit(1);
 }
 
