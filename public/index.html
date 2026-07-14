@@ -15,7 +15,24 @@
     <div class="ticket-header__inner">
       <div class="ticket-header__eyebrow">BOLETO OFICIAL &middot; No transferible</div>
       <h1 class="ticket-header__title">RIFA</h1>
-      <p class="ticket-header__subtitle">Elige un número disponible, regístrate (opcional) y separa tu boleto.</p>
+      <p class="ticket-header__subtitle">Elige un número disponible, regístrate y separa tu boleto.</p>
+
+      <div class="prize-banner">
+        <div class="prize-banner__item">
+          <span class="prize-banner__item-label">Premio mayor</span>
+          <span class="prize-banner__item-value prize-banner__item-value--amount">$500.000</span>
+        </div>
+        <div class="prize-banner__divider" aria-hidden="true"></div>
+        <div class="prize-banner__item">
+          <span class="prize-banner__item-label">Valor del puesto</span>
+          <span class="prize-banner__item-value">$2.000</span>
+        </div>
+        <div class="prize-banner__divider" aria-hidden="true"></div>
+        <div class="prize-banner__item">
+          <span class="prize-banner__item-label">Fecha del sorteo</span>
+          <span class="prize-banner__item-value">15 de agosto</span>
+        </div>
+      </div>
 
       <div class="stub-row" id="statsRow">
         <div class="stub">
@@ -43,12 +60,12 @@
     </div>
 
     <div id="board" class="board" aria-label="Cuadrícula de números de la rifa">
-      <!-- Los 100 tickets se generan por JavaScript -->
+      <!-- Los tickets se generan por JavaScript -->
     </div>
   </main>
 
   <footer class="page-footer">
-    <p>Los datos son opcionales y solo se usan para identificar al ganador del boleto.</p>
+    <p>El nombre es obligatorio para participar; el teléfono es opcional.</p>
   </footer>
 
   <!-- Modal de registro -->
@@ -57,27 +74,19 @@
       <button class="modal__close" id="modalClose" type="button" aria-label="Cerrar">&times;</button>
 
       <div class="modal__ticket-number">
-        <span class="modal__hash">N&deg;</span><span id="modalNumber">00</span>
+        <span class="modal__hash">N&deg;</span><span id="modalNumber">000</span>
       </div>
       <h2 id="modalTitle" class="modal__title">Apartar este número</h2>
-      <p class="modal__hint">Tus datos son opcionales. Puedes apartar el número sin llenarlos.</p>
+      <p class="modal__hint">El nombre es obligatorio. El teléfono es opcional.</p>
 
       <form id="registerForm" class="modal__form">
         <label class="field">
-          <span>Nombre</span>
-          <input type="text" id="fieldName" name="name" placeholder="Nombre completo" autocomplete="name" />
-        </label>
-        <label class="field">
-          <span>Correo</span>
-          <input type="email" id="fieldEmail" name="email" placeholder="correo@ejemplo.com" autocomplete="email" />
+          <span>Nombre <span class="field__required">*</span></span>
+          <input type="text" id="fieldName" name="name" placeholder="Nombre completo" autocomplete="name" required />
         </label>
         <label class="field">
           <span>Teléfono</span>
           <input type="tel" id="fieldPhone" name="phone" placeholder="Número de contacto" autocomplete="tel" />
-        </label>
-        <label class="field">
-          <span>Notas</span>
-          <input type="text" id="fieldNotes" name="notes" placeholder="Opcional" />
         </label>
 
         <p id="modalError" class="modal__error" hidden></p>

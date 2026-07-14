@@ -19,7 +19,7 @@ let numbersCache = [];
 
 function setStatus(message, isError = false) {
   statusMessage.textContent = message;
-  statusMessage.style.color = isError ? '#b7443f' : '';
+  statusMessage.style.color = isError ? '#a83832' : '';
 }
 
 function renderStats(numbers) {
@@ -38,7 +38,7 @@ function renderBoard(numbers) {
     btn.dataset.number = n.number;
 
     const label = document.createElement('span');
-    label.textContent = String(n.number).padStart(2, '0');
+    label.textContent = String(n.number).padStart(3, '0');
     btn.appendChild(label);
 
     if (n.taken) {
@@ -83,7 +83,7 @@ async function loadNumbers({ silent } = {}) {
 
 function openModal(number) {
   selectedNumber = number;
-  modalNumber.textContent = String(number).padStart(2, '0');
+  modalNumber.textContent = String(number).padStart(3, '0');
   modalError.hidden = true;
   registerForm.reset();
   modalOverlay.hidden = false;
@@ -109,14 +109,21 @@ registerForm.addEventListener('submit', async (e) => {
   if (selectedNumber === null) return;
 
   modalError.hidden = true;
+
+  const nameValue = document.getElementById('fieldName').value.trim();
+  if (!nameValue) {
+    modalError.textContent = 'El nombre es obligatorio.';
+    modalError.hidden = false;
+    document.getElementById('fieldName').focus();
+    return;
+  }
+
   confirmBtn.disabled = true;
   confirmBtn.textContent = 'Guardando...';
 
   const payload = {
-    name: document.getElementById('fieldName').value.trim(),
-    email: document.getElementById('fieldEmail').value.trim(),
+    name: nameValue,
     phone: document.getElementById('fieldPhone').value.trim(),
-    notes: document.getElementById('fieldNotes').value.trim(),
   };
 
   try {

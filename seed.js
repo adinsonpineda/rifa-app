@@ -1,13 +1,14 @@
-// Este script crea (si no existen) los numeros del 1 al TOTAL_NUMBERS en la base de datos.
-// Se ejecuta automaticamente al iniciar el servidor, pero tambien puedes correrlo
-// manualmente con: npm run seed
+// Este script crea (si no existen) los numeros del RAFFLE_START al RAFFLE_END
+// en la base de datos. Se ejecuta automaticamente al iniciar el servidor,
+// pero tambien puedes correrlo manualmente con: npm run seed
 
 require('dotenv').config();
 const mongoose = require('mongoose');
 const RaffleNumber = require('./models/RaffleNumber');
 const { buildMongoUri } = require('./config/mongoUri');
 
-const TOTAL_NUMBERS = parseInt(process.env.TOTAL_NUMBERS || '100', 10);
+const RAFFLE_START = parseInt(process.env.RAFFLE_START ?? '0', 10);
+const RAFFLE_END = parseInt(process.env.RAFFLE_END ?? '999', 10);
 
 async function seed() {
   const uri = buildMongoUri();
@@ -23,7 +24,7 @@ async function seed() {
   console.log('Conectado a MongoDB para inicializar numeros...');
 
   const bulkOps = [];
-  for (let i = 1; i <= TOTAL_NUMBERS; i++) {
+  for (let i = RAFFLE_START; i <= RAFFLE_END; i++) {
     bulkOps.push({
       updateOne: {
         filter: { number: i },
@@ -34,8 +35,9 @@ async function seed() {
   }
 
   const result = await RaffleNumber.bulkWrite(bulkOps);
+  const total = RAFFLE_END - RAFFLE_START + 1;
   console.log(
-    `Listo. Numeros insertados nuevos: ${result.upsertedCount || 0}. Total esperado: ${TOTAL_NUMBERS}`
+    `Listo. Numeros insertados nuevos: ${result.upsertedCount || 0}. Total esperado: ${total}`
   );
 
   await mongoose.disconnect();

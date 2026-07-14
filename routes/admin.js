@@ -3,7 +3,7 @@ const router = express.Router();
 const RaffleNumber = require('../models/RaffleNumber');
 
 // GET /api/admin/participants?key=TU_CLAVE
-// Devuelve la lista completa (incluye nombre, email, telefono) de numeros ya tomados.
+// Devuelve la lista completa (incluye nombre y telefono) de numeros ya tomados.
 // Protegido con una clave simple definida en la variable de entorno ADMIN_KEY.
 router.get('/participants', async (req, res) => {
   try {

@@ -6,7 +6,7 @@ const raffleNumberSchema = new mongoose.Schema(
       type: Number,
       required: true,
       unique: true,
-      min: 1,
+      min: 0,
     },
     taken: {
       type: Boolean,
@@ -17,17 +17,7 @@ const raffleNumberSchema = new mongoose.Schema(
       default: '',
       trim: true,
     },
-    email: {
-      type: String,
-      default: '',
-      trim: true,
-    },
     phone: {
-      type: String,
-      default: '',
-      trim: true,
-    },
-    notes: {
       type: String,
       default: '',
       trim: true,

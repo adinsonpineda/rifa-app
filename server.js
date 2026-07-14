@@ -12,7 +12,8 @@ const { buildMongoUri } = require('./config/mongoUri');
 const app = express();
 const PORT = process.env.PORT || 3000;
 const MONGODB_URI = buildMongoUri();
-const TOTAL_NUMBERS = parseInt(process.env.TOTAL_NUMBERS || '100', 10);
+const RAFFLE_START = parseInt(process.env.RAFFLE_START ?? '0', 10);
+const RAFFLE_END = parseInt(process.env.RAFFLE_END ?? '999', 10);
 
 if (!MONGODB_URI) {
   console.error(
@@ -31,7 +32,7 @@ app.use('/api/admin', adminRouter);
 
 async function ensureNumbersExist() {
   const bulkOps = [];
-  for (let i = 1; i <= TOTAL_NUMBERS; i++) {
+  for (let i = RAFFLE_START; i <= RAFFLE_END; i++) {
     bulkOps.push({
       updateOne: {
         filter: { number: i },
@@ -49,7 +50,9 @@ async function start() {
     console.log('Conectado a MongoDB correctamente.');
 
     await ensureNumbersExist();
-    console.log(`Numeros del 1 al ${TOTAL_NUMBERS} listos en la base de datos.`);
+    console.log(
+      `Numeros del ${String(RAFFLE_START).padStart(3, '0')} al ${String(RAFFLE_END).padStart(3, '0')} listos en la base de datos.`
+    );
 
     app.listen(PORT, () => {
       console.log(`Servidor corriendo en http://localhost:${PORT}`);

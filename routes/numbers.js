@@ -19,10 +19,15 @@ router.get('/', async (req, res) => {
 router.post('/:number/select', async (req, res) => {
   try {
     const numberValue = parseInt(req.params.number, 10);
-    const { name, email, phone, notes } = req.body || {};
+    const { name, phone } = req.body || {};
 
-    if (!Number.isInteger(numberValue)) {
+    if (!Number.isInteger(numberValue) || numberValue < 0) {
       return res.status(400).json({ error: 'Numero invalido.' });
+    }
+
+    const trimmedName = (name || '').trim();
+    if (!trimmedName) {
+      return res.status(400).json({ error: 'El nombre es obligatorio.' });
     }
 
     // Operacion atomica: solo actualiza si taken es actualmente false.
@@ -32,10 +37,8 @@ router.post('/:number/select', async (req, res) => {
       {
         $set: {
           taken: true,
-          name: name || '',
-          email: email || '',
-          phone: phone || '',
-          notes: notes || '',
+          name: trimmedName,
+          phone: (phone || '').trim(),
           takenAt: new Date(),
         },
       },
@@ -72,9 +75,7 @@ router.post('/:number/release', async (req, res) => {
         $set: {
           taken: false,
           name: '',
-          email: '',
           phone: '',
-          notes: '',
           takenAt: null,
         },
       },

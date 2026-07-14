@@ -18,7 +18,9 @@ services:
         sync: false
       - key: MONGODB_DB
         value: rifa
-      - key: TOTAL_NUMBERS
-        value: "100"
+      - key: RAFFLE_START
+        value: "0"
+      - key: RAFFLE_END
+        value: "999"
       - key: ADMIN_KEY
         sync: false

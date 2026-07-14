@@ -83,7 +83,8 @@ vez que usas git desde esa terminal, te pedirá iniciar sesión en GitHub
    | Variable | Valor |
    |---|---|
    | `MONGODB_URI` | la cadena de conexión completa del Paso 1 |
-   | `TOTAL_NUMBERS` | `100` |
+   | `RAFFLE_START` | `0` |
+   | `RAFFLE_END` | `999` |
    | `ADMIN_KEY` | una clave secreta que inventes tú, ej: `mi-clave-2026` |
 6. Click en **Create Web Service** (o **Deploy**).
 7. Espera 1-2 minutos mientras Render instala dependencias y arranca el

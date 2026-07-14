@@ -1,6 +1,6 @@
-# Rifa Web (1 al 100) con MongoDB
+# Rifa Web (000 al 999) con MongoDB
 
-Aplicación web para gestionar una rifa: cuadrícula de números del 1 al 100,
+Aplicación web para gestionar una rifa: cuadrícula de números del 000 al 999,
 selección de número con registro de datos opcionales, y marcado automático
 de "apartado" guardado en MongoDB.
 
@@ -9,7 +9,7 @@ de "apartado" guardado en MongoDB.
 ```
 rifa-app/
 ├── server.js              # Servidor Express
-├── seed.js                # Inicializa los numeros 1-100 en la base de datos
+├── seed.js                # Inicializa los numeros 000-999 en la base de datos
 ├── models/
 │   └── RaffleNumber.js    # Esquema de Mongoose
 ├── routes/
@@ -51,7 +51,8 @@ Edita `.env`:
 ```
 MONGODB_URI=mongodb+srv://usuario:password@cluster0.xxxxx.mongodb.net/rifa?retryWrites=true&w=majority
 PORT=3000
-TOTAL_NUMBERS=100
+RAFFLE_START=0
+RAFFLE_END=999
 ADMIN_KEY=elige-una-clave-secreta
 ```
 
@@ -70,7 +71,7 @@ Veras en la consola:
 
 ```
 Conectado a MongoDB correctamente.
-Numeros del 1 al 100 listos en la base de datos.
+Numeros del 000 al 999 listos en la base de datos.
 Servidor corriendo en http://localhost:3000
 ```
 
@@ -81,9 +82,9 @@ primera vez que arranca (no borra datos existentes en arranques posteriores).
 
 ## 5. Cómo funciona
 
-- La cuadrícula muestra los números 1-100 como "boletos".
+- La cuadrícula muestra los números 000-999 como "boletos".
 - Al hacer clic en un número disponible, se abre un formulario opcional
-  (nombre, correo, teléfono, notas).
+  (nombre obligatorio, teléfono opcional).
 - Al confirmar, se envía una petición `POST /api/numbers/:numero/select`.
 - El servidor usa una actualización **atómica** en MongoDB
   (`findOneAndUpdate` con condición `taken: false`), así que si dos personas
@@ -111,7 +112,7 @@ Puedes subir este proyecto a servicios como Render, Railway o Fly.io:
 1. Sube el código a un repositorio de GitHub.
 2. Crea un servicio "Web Service" en la plataforma elegida, apuntando a
    este repositorio.
-3. Configura las variables de entorno (`MONGODB_URI`, `PORT`, `TOTAL_NUMBERS`,
+3. Configura las variables de entorno (`MONGODB_URI` o las separadas, `PORT`, `RAFFLE_START`, `RAFFLE_END`,
    `ADMIN_KEY`) en el panel de esa plataforma (usa tu cadena de Atlas).
 4. Comando de inicio: `npm start`.
 
@@ -119,7 +120,7 @@ Puedes subir este proyecto a servicios como Render, Railway o Fly.io:
 
 - Los datos personales solo se guardan si el usuario decide llenarlos;
   el número puede apartarse dejando todos los campos vacíos.
-- La ruta pública `/api/numbers` **no** expone nombres, correos ni
+- La ruta pública `/api/numbers` **no** expone nombres ni
   teléfonos — solo el número y si está tomado. Los datos personales solo
   son visibles a través de la ruta protegida de administrador.
 - Cambia `ADMIN_KEY` por una clave larga y única antes de usar esto en
