@@ -345,6 +345,139 @@ h1, h2 { margin: 0; }
   margin-bottom: 1.25rem;
 }
 
+/* ---------- Seccion de pago: numeros y apps ---------- */
+.pay-info {
+  background: var(--surface-raised);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 1rem 1.1rem;
+  margin-bottom: 1.25rem;
+}
+
+.pay-info__title {
+  margin: 0 0 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text);
+  text-align: center;
+}
+
+.pay-numbers {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.pay-number {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.pay-number__name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.pay-number__value {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  border: 1px dashed var(--line);
+  background: var(--surface);
+  color: var(--text);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 0.4rem 0.65rem;
+  border-radius: 8px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+}
+
+.pay-number__value:hover { border-color: var(--primary); color: var(--primary); }
+
+.pay-number__value.is-copied {
+  background: var(--primary);
+  border-color: var(--primary);
+  border-style: solid;
+  color: #ffffff;
+}
+
+.pay-number__icon { font-size: 0.85rem; opacity: 0.7; }
+
+.pay-info__subtitle {
+  margin: 0.9rem 0 0.6rem;
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  text-align: center;
+}
+
+.pay-apps {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.app-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.55rem 0.7rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.12s ease, border-color 0.12s ease, box-shadow 0.12s ease;
+}
+
+.app-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 10px rgba(35, 41, 31, 0.08);
+}
+
+.app-btn__logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  color: #ffffff;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 0.95rem;
+  flex-shrink: 0;
+}
+
+.app-btn--nequi { border-color: #ffd0e2; background: #fff3f8; }
+.app-btn--nequi .app-btn__logo { background: #e6007e; }
+.app-btn--nequi:hover { border-color: #e6007e; }
+
+.app-btn--daviplata { border-color: #ffd6cf; background: #fff5f2; }
+.app-btn--daviplata .app-btn__logo { background: #e2231a; }
+.app-btn--daviplata:hover { border-color: #e2231a; }
+
+.pay-info__note {
+  margin: 0.85rem 0 0;
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  text-align: center;
+}
+
+@media (max-width: 380px) {
+  .pay-number { flex-direction: column; align-items: flex-start; }
+  .pay-number__value { width: 100%; justify-content: center; }
+}
+
 .modal__form { display: flex; flex-direction: column; gap: 0.85rem; }
 
 .field { display: flex; flex-direction: column; gap: 0.3rem; font-size: 0.8rem; color: var(--text-dim); }
@@ -377,6 +510,11 @@ h1, h2 { margin: 0; }
   justify-content: flex-end;
   gap: 0.6rem;
   margin-top: 0.5rem;
+}
+
+.modal__actions--single {
+  justify-content: center;
+  margin-top: 1.25rem;
 }
 
 @media (max-width: 480px) {

@@ -99,6 +99,59 @@
     </div>
   </div>
 
+  <!-- Modal de pago (aparece despues de registrar, y se puede reabrir tocando un numero ya apartado) -->
+  <div id="paymentOverlay" class="modal-overlay" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="paymentTitle">
+      <button class="modal__close" id="paymentClose" type="button" aria-label="Cerrar">&times;</button>
+
+      <div class="modal__ticket-number">
+        <span class="modal__hash">N&deg;</span><span id="paymentNumber">000</span>
+      </div>
+      <h2 id="paymentTitle" class="modal__title">¡Número apartado!</h2>
+      <p class="modal__hint">Realiza el pago para confirmar tu boleto.</p>
+
+      <div class="pay-info">
+        <p class="pay-info__title">Paga $2.000 a cualquiera de estos números</p>
+
+        <div class="pay-numbers">
+          <div class="pay-number">
+            <span class="pay-number__name">Walter Pineda</span>
+            <button type="button" class="pay-number__value" data-phone="3122265231">
+              312 226 5231
+              <span class="pay-number__icon" aria-hidden="true">&#10697;</span>
+            </button>
+          </div>
+          <div class="pay-number">
+            <span class="pay-number__name">Carmen Beltrán</span>
+            <button type="button" class="pay-number__value" data-phone="3204674356">
+              320 467 4356
+              <span class="pay-number__icon" aria-hidden="true">&#10697;</span>
+            </button>
+          </div>
+        </div>
+
+        <p class="pay-info__subtitle">Toca un número para copiarlo, luego paga desde tu app</p>
+
+        <div class="pay-apps">
+          <button type="button" class="app-btn app-btn--nequi" data-app="nequi">
+            <span class="app-btn__logo">N</span>
+            <span class="app-btn__label">Nequi</span>
+          </button>
+          <button type="button" class="app-btn app-btn--daviplata" data-app="daviplata">
+            <span class="app-btn__logo">D</span>
+            <span class="app-btn__label">DaviPlata</span>
+          </button>
+        </div>
+
+        <p class="pay-info__note">Guarda tu comprobante de pago. Puedes volver a ver estas instrucciones tocando tu número en cualquier momento.</p>
+      </div>
+
+      <div class="modal__actions modal__actions--single">
+        <button type="button" id="paymentDoneBtn" class="primary-btn">Listo</button>
+      </div>
+    </div>
+  </div>
+
 <script src="script.js"></script>
 </body>
 </html>

@@ -14,6 +14,12 @@ const registerForm = document.getElementById('registerForm');
 const modalError = document.getElementById('modalError');
 const confirmBtn = document.getElementById('confirmBtn');
 
+const paymentOverlay = document.getElementById('paymentOverlay');
+const paymentNumber = document.getElementById('paymentNumber');
+const paymentClose = document.getElementById('paymentClose');
+const paymentDoneBtn = document.getElementById('paymentDoneBtn');
+const paymentTitle = document.getElementById('paymentTitle');
+
 let selectedNumber = null;
 let numbersCache = [];
 
@@ -46,8 +52,7 @@ function renderBoard(numbers) {
       stamp.className = 'ticket__stamp';
       stamp.textContent = 'APARTADO';
       btn.appendChild(stamp);
-      btn.setAttribute('aria-label', `Número ${n.number}, apartado`);
-      btn.disabled = false; // sigue siendo clicable para mostrar mensaje, pero no abre el modal
+      btn.setAttribute('aria-label', `Número ${n.number}, apartado. Toca para ver las instrucciones de pago.`);
     } else {
       btn.setAttribute('aria-label', `Número ${n.number}, disponible`);
     }
@@ -59,7 +64,9 @@ function renderBoard(numbers) {
 
 function handleTicketClick(numberData) {
   if (numberData.taken) {
-    setStatus(`El número ${numberData.number} ya está apartado.`, true);
+    // Un numero ya apartado reabre las instrucciones de pago,
+    // sin volver a mostrar el formulario de registro.
+    openPaymentModal(numberData.number, { justRegistered: false });
     return;
   }
   openModal(numberData.number);
@@ -81,6 +88,7 @@ async function loadNumbers({ silent } = {}) {
   }
 }
 
+// ---------- Modal de registro ----------
 function openModal(number) {
   selectedNumber = number;
   modalNumber.textContent = String(number).padStart(3, '0');
@@ -92,16 +100,12 @@ function openModal(number) {
 
 function closeModal() {
   modalOverlay.hidden = true;
-  selectedNumber = null;
 }
 
 modalClose.addEventListener('click', closeModal);
 cancelBtn.addEventListener('click', closeModal);
 modalOverlay.addEventListener('click', (e) => {
   if (e.target === modalOverlay) closeModal();
-});
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape' && !modalOverlay.hidden) closeModal();
 });
 
 registerForm.addEventListener('submit', async (e) => {
@@ -145,9 +149,11 @@ registerForm.addEventListener('submit', async (e) => {
       return;
     }
 
-    setStatus(`¡Número ${selectedNumber} apartado con éxito!`);
+    const takenNumber = selectedNumber;
     closeModal();
     await loadNumbers({ silent: true });
+    // Mostramos las instrucciones de pago justo despues de registrar.
+    openPaymentModal(takenNumber, { justRegistered: true });
   } catch (err) {
     console.error(err);
     modalError.textContent = 'Error de conexión. Intenta de nuevo.';
@@ -159,5 +165,110 @@ registerForm.addEventListener('submit', async (e) => {
 });
 
 refreshBtn.addEventListener('click', () => loadNumbers());
+
+// ---------- Modal de pago (Nequi / DaviPlata) ----------
+function openPaymentModal(number, { justRegistered } = {}) {
+  paymentNumber.textContent = String(number).padStart(3, '0');
+  paymentTitle.textContent = justRegistered ? '¡Número apartado!' : 'Instrucciones de pago';
+  paymentOverlay.hidden = false;
+}
+
+function closePaymentModal() {
+  paymentOverlay.hidden = true;
+}
+
+paymentClose.addEventListener('click', closePaymentModal);
+paymentDoneBtn.addEventListener('click', closePaymentModal);
+paymentOverlay.addEventListener('click', (e) => {
+  if (e.target === paymentOverlay) closePaymentModal();
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key !== 'Escape') return;
+  if (!paymentOverlay.hidden) closePaymentModal();
+  else if (!modalOverlay.hidden) closeModal();
+});
+
+// ---------- Pago por Nequi / DaviPlata: copiar numero y abrir la app ----------
+const PAYMENT_APPS = {
+  nequi: {
+    androidPackage: 'com.nequi.MobileApp',
+    iosUrl: 'https://apps.apple.com/co/app/nequi-colombia/id1075378688',
+    label: 'Nequi',
+  },
+  daviplata: {
+    androidPackage: 'com.davivienda.daviplataapp',
+    iosUrl: 'https://apps.apple.com/co/app/daviplata/id1100731780',
+    label: 'DaviPlata',
+  },
+};
+
+function getDeviceOS() {
+  const ua = navigator.userAgent || '';
+  if (/android/i.test(ua)) return 'android';
+  if (/iphone|ipad|ipod/i.test(ua)) return 'ios';
+  return 'other';
+}
+
+function openPaymentApp(appKey) {
+  const app = PAYMENT_APPS[appKey];
+  if (!app) return;
+
+  const os = getDeviceOS();
+  if (os === 'android') {
+    // Intenta abrir la app instalada; si no esta instalada, Android
+    // redirige automaticamente a la tienda gracias a browser_fallback_url.
+    const playStoreUrl = `https://play.google.com/store/apps/details?id=${app.androidPackage}`;
+    const fallback = encodeURIComponent(playStoreUrl);
+    window.location.href = `intent://open#Intent;package=${app.androidPackage};S.browser_fallback_url=${fallback};end`;
+  } else if (os === 'ios') {
+    // No existe un esquema de enlace oficial documentado para abrir apps
+    // bancarias directamente en iOS, asi que llevamos a la ficha del App Store.
+    window.location.href = app.iosUrl;
+  } else {
+    setStatus(`Abre la app de ${app.label} desde tu celular para completar el pago.`);
+  }
+}
+
+async function copyPhoneNumber(phone, button) {
+  const originalHTML = button.innerHTML;
+  try {
+    await navigator.clipboard.writeText(phone);
+  } catch (err) {
+    // Respaldo para navegadores sin soporte de la Clipboard API
+    const tempInput = document.createElement('input');
+    tempInput.value = phone;
+    tempInput.style.position = 'fixed';
+    tempInput.style.opacity = '0';
+    document.body.appendChild(tempInput);
+    tempInput.select();
+    try {
+      document.execCommand('copy');
+    } catch (copyErr) {
+      console.error('No se pudo copiar el numero:', copyErr);
+    }
+    document.body.removeChild(tempInput);
+  }
+  button.textContent = '¡Copiado!';
+  button.classList.add('is-copied');
+  setTimeout(() => {
+    button.innerHTML = originalHTML;
+    button.classList.remove('is-copied');
+  }, 1800);
+}
+
+function setupPaymentButtons() {
+  document.querySelectorAll('.pay-number__value').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      copyPhoneNumber(btn.dataset.phone, btn);
+    });
+  });
+
+  document.querySelectorAll('.app-btn').forEach((btn) => {
+    btn.addEventListener('click', () => openPaymentApp(btn.dataset.app));
+  });
+}
+
+setupPaymentButtons();
 
 loadNumbers();
