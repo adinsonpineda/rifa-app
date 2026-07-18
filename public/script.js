@@ -47,6 +47,7 @@ function renderBoard(numbers) {
     btn.dataset.number = n.number;
 
     const label = document.createElement('span');
+    label.className = 'ticket__number';
     label.textContent = String(n.number).padStart(3, '0');
     btn.appendChild(label);
 
