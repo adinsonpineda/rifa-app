@@ -26,6 +26,14 @@ const raffleNumberSchema = new mongoose.Schema(
       type: Date,
       default: null,
     },
+    paid: {
+      type: Boolean,
+      default: false,
+    },
+    paidAt: {
+      type: Date,
+      default: null,
+    },
   },
   { timestamps: true }
 );

@@ -5,6 +5,7 @@ const refreshBtn = document.getElementById('refreshBtn');
 const statAvailable = document.getElementById('statAvailable');
 const statTaken = document.getElementById('statTaken');
 const statTotal = document.getElementById('statTotal');
+const statPaid = document.getElementById('statPaid');
 
 const modalOverlay = document.getElementById('modalOverlay');
 const modalNumber = document.getElementById('modalNumber');
@@ -30,9 +31,11 @@ function setStatus(message, isError = false) {
 
 function renderStats(numbers) {
   const taken = numbers.filter((n) => n.taken).length;
+  const paid = numbers.filter((n) => n.paid).length;
   statAvailable.textContent = numbers.length - taken;
   statTaken.textContent = taken;
   statTotal.textContent = numbers.length;
+  if (statPaid) statPaid.textContent = paid;
 }
 
 function renderBoard(numbers) {
@@ -40,7 +43,7 @@ function renderBoard(numbers) {
   numbers.forEach((n) => {
     const btn = document.createElement('button');
     btn.type = 'button';
-    btn.className = 'ticket' + (n.taken ? ' ticket--taken' : '');
+    btn.className = 'ticket' + (n.taken ? ' ticket--taken' : '') + (n.paid ? ' ticket--paid' : '');
     btn.dataset.number = n.number;
 
     const label = document.createElement('span');
@@ -50,9 +53,12 @@ function renderBoard(numbers) {
     if (n.taken) {
       const stamp = document.createElement('span');
       stamp.className = 'ticket__stamp';
-      stamp.textContent = 'APARTADO';
+      stamp.textContent = n.paid ? 'PAGADO' : 'APARTADO';
       btn.appendChild(stamp);
-      btn.setAttribute('aria-label', `Número ${n.number}, apartado. Toca para ver las instrucciones de pago.`);
+      btn.setAttribute(
+        'aria-label',
+        `Número ${n.number}, ${n.paid ? 'pagado' : 'apartado'}. Toca para ver las instrucciones de pago.`
+      );
     } else {
       btn.setAttribute('aria-label', `Número ${n.number}, disponible`);
     }

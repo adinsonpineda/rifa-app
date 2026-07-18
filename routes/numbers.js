@@ -6,7 +6,7 @@ const RaffleNumber = require('../models/RaffleNumber');
 router.get('/', async (req, res) => {
   try {
     const numbers = await RaffleNumber.find({})
-      .select('number taken takenAt') // no exponemos datos personales al listado publico
+      .select('number taken takenAt paid') // no exponemos datos personales al listado publico
       .sort({ number: 1 });
     res.json(numbers);
   } catch (err) {
@@ -77,6 +77,8 @@ router.post('/:number/release', async (req, res) => {
           name: '',
           phone: '',
           takenAt: null,
+          paid: false,
+          paidAt: null,
         },
       },
       { new: true }

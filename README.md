@@ -93,10 +93,32 @@ primera vez que arranca (no borra datos existentes en arranques posteriores).
 - El número queda marcado visualmente como "APARTADO" para todos los que
   visiten la página (se actualiza al recargar o pulsar "Actualizar").
 
-## 6. Ver los participantes (administrador)
+## 6. Ver los participantes y marcar pagos (administrador)
 
-Para consultar la lista completa con los datos personales de quienes ya
-apartaron un número, visita en el navegador:
+Visita en tu navegador:
+
+```
+http://localhost:3000/admin.html
+```
+
+Ingresa tu `ADMIN_KEY` (la misma que pusiste en `.env` / Render). Ahí puedes:
+
+- Ver la lista completa de números apartados, con nombre, teléfono y fecha.
+- Buscar por número, nombre o teléfono.
+- Marcar cada número como **"Pagado"** (o desmarcarlo si te equivocaste).
+
+Cuando marcas un número como pagado, en el tablero público ese número deja
+de mostrar el sello rojo "APARTADO" y pasa a mostrar un sello verde
+"PAGADO", visible para cualquier persona que visite la página (sin exponer
+nombre, teléfono ni ningún dato personal — sigue siendo información
+pública solo del número).
+
+Esta página no está enlazada desde ningún lugar visible de la app; solo
+quien conozca la URL exacta y la clave puede entrar. La clave se guarda
+temporalmente en el navegador mientras esa pestaña esté abierta (no queda
+guardada de forma permanente).
+
+También puedes seguir usando la ruta de la API directamente si prefieres:
 
 ```
 http://localhost:3000/api/admin/participants?key=TU_ADMIN_KEY

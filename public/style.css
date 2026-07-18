@@ -222,6 +222,11 @@ h1, h2 { margin: 0; }
   border-color: rgba(168, 56, 50, 0.35);
 }
 
+.ticket--taken.ticket--paid {
+  border-color: rgba(31, 138, 84, 0.4);
+  background: rgba(47, 174, 106, 0.08);
+}
+
 .ticket--taken .ticket__stamp {
   position: absolute;
   font-family: 'IBM Plex Mono', monospace;
@@ -238,6 +243,12 @@ h1, h2 { margin: 0; }
   margin-left: -19px;
   background: rgba(168, 56, 50, 0.06);
   white-space: nowrap;
+}
+
+.ticket--paid .ticket__stamp {
+  color: var(--primary);
+  border-color: var(--primary);
+  background: rgba(47, 174, 106, 0.08);
 }
 
 .ticket--pending {
