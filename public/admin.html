@@ -29,33 +29,66 @@
     <!-- Panel principal (oculto hasta iniciar sesion) -->
     <section id="panelSection" class="admin-panel" hidden>
       <div class="admin-panel__header">
-        <h1 class="admin-panel__title">Participantes</h1>
+        <h1 class="admin-panel__title" id="panelTitle">Participantes</h1>
         <div class="admin-panel__header-actions">
           <button id="refreshAdminBtn" type="button" class="ghost-btn">Actualizar</button>
           <button id="logoutBtn" type="button" class="ghost-btn">Cerrar sesión</button>
         </div>
       </div>
 
-      <div class="admin-stats" id="adminStats"></div>
+      <div class="admin-tabs">
+        <button type="button" class="admin-tab is-active" id="tabParticipants" data-tab="participants">Participantes</button>
+        <button type="button" class="admin-tab" id="tabCollaborators" data-tab="collaborators">Colaboradores</button>
+      </div>
 
-      <input type="text" id="searchInput" class="admin-search" placeholder="Buscar por número, nombre o teléfono..." />
+      <!-- Vista: Participantes -->
+      <div id="participantsView">
+        <div class="admin-stats" id="adminStats"></div>
 
-      <p id="adminStatus" class="status-message"></p>
+        <input type="text" id="searchInput" class="admin-search" placeholder="Buscar por número, nombre, teléfono o vendedor..." />
 
-      <div class="admin-table-wrap">
-        <table class="admin-table">
-          <thead>
-            <tr>
-              <th>N&deg;</th>
-              <th>Nombre</th>
-              <th>Teléfono</th>
-              <th>Apartado</th>
-              <th>Estado</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody id="participantsBody"></tbody>
-        </table>
+        <p id="adminStatus" class="status-message"></p>
+
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>N&deg;</th>
+                <th>Nombre</th>
+                <th>Teléfono</th>
+                <th>Vendido por</th>
+                <th>Apartado</th>
+                <th>Estado</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="participantsBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Vista: Colaboradores -->
+      <div id="collaboratorsView" hidden>
+        <form id="newCollaboratorForm" class="admin-inline-form">
+          <input type="text" id="newCollaboratorName" placeholder="Nombre del colaborador" required />
+          <button type="submit" class="primary-btn">Agregar colaborador</button>
+        </form>
+
+        <p id="collaboratorsStatus" class="status-message"></p>
+
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Enlace de venta</th>
+                <th>Estado</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="collaboratorsBody"></tbody>
+          </table>
+        </div>
       </div>
     </section>
   </div>

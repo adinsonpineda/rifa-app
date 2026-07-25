@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const RaffleNumber = require('../models/RaffleNumber');
+const Collaborator = require('../models/Collaborator');
 
 // GET /api/numbers -> devuelve el estado de todos los numeros
 router.get('/', async (req, res) => {
@@ -19,7 +20,7 @@ router.get('/', async (req, res) => {
 router.post('/:number/select', async (req, res) => {
   try {
     const numberValue = parseInt(req.params.number, 10);
-    const { name, phone } = req.body || {};
+    const { name, phone, sellerCode } = req.body || {};
 
     if (!Number.isInteger(numberValue) || numberValue < 0) {
       return res.status(400).json({ error: 'Numero invalido.' });
@@ -28,6 +29,16 @@ router.post('/:number/select', async (req, res) => {
     const trimmedName = (name || '').trim();
     if (!trimmedName) {
       return res.status(400).json({ error: 'El nombre es obligatorio.' });
+    }
+
+    // Si viene un codigo de vendedor, lo validamos contra la base de datos
+    // (nunca confiamos en un nombre que venga directo del cliente).
+    let soldBy = '';
+    if (sellerCode) {
+      const collaborator = await Collaborator.findOne({ code: String(sellerCode).trim(), active: true });
+      if (collaborator) {
+        soldBy = collaborator.name;
+      }
     }
 
     // Operacion atomica: solo actualiza si taken es actualmente false.
@@ -40,6 +51,7 @@ router.post('/:number/select', async (req, res) => {
           name: trimmedName,
           phone: (phone || '').trim(),
           takenAt: new Date(),
+          soldBy,
         },
       },
       { new: true }
@@ -79,6 +91,7 @@ router.post('/:number/release', async (req, res) => {
           takenAt: null,
           paid: false,
           paidAt: null,
+          soldBy: '',
         },
       },
       { new: true }

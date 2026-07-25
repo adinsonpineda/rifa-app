@@ -187,3 +187,75 @@
   font-size: 0.85rem;
   padding: 2rem 1rem;
 }
+
+/* ---------- Pestanas ---------- */
+.admin-tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.admin-tab {
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--text-dim);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 600;
+  padding: 0.6rem 0.3rem;
+  cursor: pointer;
+  margin-bottom: -1px;
+}
+
+.admin-tab.is-active {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+}
+
+/* ---------- Formulario de colaboradores ---------- */
+.admin-inline-form {
+  display: flex;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.admin-inline-form input {
+  flex: 1;
+  min-width: 200px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0.6rem 0.8rem;
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+}
+
+.admin-inline-form input:focus { outline: none; border-color: var(--primary); }
+
+.seller-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.72rem;
+  color: var(--text-dim);
+}
+
+.seller-link__copy {
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.seller-link__copy:hover { border-color: var(--primary); color: var(--primary); }
+.seller-link__copy.is-copied { background: var(--primary); border-color: var(--primary); color: #fff; }

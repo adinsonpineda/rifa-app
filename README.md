@@ -127,6 +127,36 @@ http://localhost:3000/api/admin/participants?key=TU_ADMIN_KEY
 Reemplaza `TU_ADMIN_KEY` por el valor que pusiste en `.env`. Esto devuelve
 un JSON con todos los números tomados y sus datos.
 
+## 6.1. Colaboradores (vendedores)
+
+Puedes agregar personas que te ayuden a vender puestos en persona, y que
+quede registrado quién vendió cada número:
+
+1. Entra a `http://localhost:3000/admin.html` y ve a la pestaña **"Colaboradores"**.
+2. Escribe el nombre del colaborador (ej. "María") y dale **"Agregar colaborador"**.
+3. Se genera un **enlace único**, por ejemplo:
+   ```
+   http://localhost:3000/?v=ab12cd34
+   ```
+   Dale clic a "Copiar enlace" y envíaselo a esa persona (por WhatsApp, por ejemplo).
+4. Cuando el colaborador (o alguien a quien él le venda) abre ese enlace,
+   la página muestra un aviso **"Vendiendo como: María"** en la parte de
+   arriba. Cualquier número que se registre desde ese navegador queda
+   marcado con su nombre.
+5. En la pestaña **"Participantes"** del panel, vas a ver una columna
+   **"Vendido por"** con el nombre de quién hizo cada venta (queda en
+   blanco si la persona se registró directamente, sin pasar por ningún
+   enlace de colaborador).
+6. Puedes **desactivar** un colaborador (su enlace deja de funcionar, pero
+   sus ventas ya registradas se conservan) o **eliminarlo** por completo.
+
+Nota de seguridad: el enlace del colaborador no requiere contraseña —
+funciona con solo conocer el código. Esto es intencional para que sea
+fácil de compartir y usar desde el celular, pero significa que cualquiera
+que reciba ese enlace puede registrar ventas "a nombre" de ese colaborador.
+Si un enlace se comparte de más o quieres cortar su acceso, simplemente
+desactívalo desde el panel y crea uno nuevo.
+
 ## 7. Despliegue en internet (opcional)
 
 Puedes subir este proyecto a servicios como Render, Railway o Fly.io:

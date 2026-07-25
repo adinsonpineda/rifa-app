@@ -21,6 +21,13 @@ const paymentClose = document.getElementById('paymentClose');
 const paymentDoneBtn = document.getElementById('paymentDoneBtn');
 const paymentTitle = document.getElementById('paymentTitle');
 
+const sellerBanner = document.getElementById('sellerBanner');
+const sellerName = document.getElementById('sellerName');
+const sellerExitBtn = document.getElementById('sellerExitBtn');
+
+const SELLER_STORAGE_KEY = 'rifaSellerCode';
+let activeSellerCode = '';
+
 let selectedNumber = null;
 let numbersCache = [];
 
@@ -135,6 +142,7 @@ registerForm.addEventListener('submit', async (e) => {
   const payload = {
     name: nameValue,
     phone: document.getElementById('fieldPhone').value.trim(),
+    sellerCode: activeSellerCode || undefined,
   };
 
   try {
@@ -277,5 +285,49 @@ function setupPaymentButtons() {
 }
 
 setupPaymentButtons();
+
+// ---------- Modo vendedor (colaboradores) ----------
+// Si la pagina se abre con ?v=CODIGO, validamos el codigo contra el
+// servidor y, si es valido, mostramos "Vendiendo como: Nombre" y
+// adjuntamos ese codigo a cada numero que se registre desde este navegador.
+async function initSellerMode() {
+  const params = new URLSearchParams(window.location.search);
+  const urlCode = params.get('v');
+  const storedCode = sessionStorage.getItem(SELLER_STORAGE_KEY);
+  const codeToTry = urlCode || storedCode;
+
+  if (!codeToTry) return;
+
+  try {
+    const res = await fetch(`/api/collaborators/${encodeURIComponent(codeToTry)}`);
+    if (!res.ok) {
+      // Codigo invalido o inactivo: no activamos el modo vendedor.
+      sessionStorage.removeItem(SELLER_STORAGE_KEY);
+      return;
+    }
+    const data = await res.json();
+    activeSellerCode = codeToTry;
+    sessionStorage.setItem(SELLER_STORAGE_KEY, codeToTry);
+    sellerName.textContent = data.name;
+    sellerBanner.hidden = false;
+
+    // Limpiamos el codigo de la URL visible, sin recargar la pagina.
+    if (urlCode) {
+      const url = new URL(window.location.href);
+      url.searchParams.delete('v');
+      window.history.replaceState({}, '', url.toString());
+    }
+  } catch (err) {
+    console.error('No se pudo validar el codigo de vendedor:', err);
+  }
+}
+
+sellerExitBtn.addEventListener('click', () => {
+  activeSellerCode = '';
+  sessionStorage.removeItem(SELLER_STORAGE_KEY);
+  sellerBanner.hidden = true;
+});
+
+initSellerMode();
 
 loadNumbers();

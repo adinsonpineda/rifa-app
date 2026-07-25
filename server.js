@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 
 const numbersRouter = require('./routes/numbers');
 const adminRouter = require('./routes/admin');
+const collaboratorsRouter = require('./routes/collaborators');
 const RaffleNumber = require('./models/RaffleNumber');
 const { buildMongoUri } = require('./config/mongoUri');
 
@@ -29,6 +30,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/api/numbers', numbersRouter);
 app.use('/api/admin', adminRouter);
+app.use('/api/collaborators', collaboratorsRouter);
 
 async function ensureNumbersExist() {
   const bulkOps = [];
