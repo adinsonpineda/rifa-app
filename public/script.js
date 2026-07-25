@@ -23,7 +23,6 @@ const paymentTitle = document.getElementById('paymentTitle');
 
 const sellerBanner = document.getElementById('sellerBanner');
 const sellerName = document.getElementById('sellerName');
-const sellerExitBtn = document.getElementById('sellerExitBtn');
 
 const SELLER_STORAGE_KEY = 'rifaSellerCode';
 let activeSellerCode = '';
@@ -321,12 +320,6 @@ async function initSellerMode() {
     console.error('No se pudo validar el codigo de vendedor:', err);
   }
 }
-
-sellerExitBtn.addEventListener('click', () => {
-  activeSellerCode = '';
-  sessionStorage.removeItem(SELLER_STORAGE_KEY);
-  sellerBanner.hidden = true;
-});
 
 initSellerMode();
 

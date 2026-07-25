@@ -85,18 +85,6 @@ h1, h2 { margin: 0; }
 
 .seller-banner strong { color: var(--primary); }
 
-.seller-banner__exit {
-  border: none;
-  background: none;
-  color: var(--text-dim);
-  font-size: 0.75rem;
-  text-decoration: underline;
-  cursor: pointer;
-  padding: 0;
-}
-
-.seller-banner__exit:hover { color: var(--ink-red); }
-
 /* ---------- Banner de premio ---------- */
 .prize-banner {
   margin: 1.75rem auto 0;
