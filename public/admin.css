@@ -80,8 +80,16 @@
 
 .admin-stats strong { color: var(--text); font-size: 1.1rem; }
 
+.admin-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
 .admin-search {
-  width: 100%;
+  flex: 1;
+  min-width: 220px;
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -89,10 +97,36 @@
   color: var(--text);
   font-family: 'Inter', sans-serif;
   font-size: 0.9rem;
-  margin-bottom: 1rem;
 }
 
 .admin-search:focus { outline: none; border-color: var(--primary); }
+
+.filter-group {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.filter-btn {
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--text-dim);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 0.6rem 0.9rem;
+  border-radius: 8px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
+}
+
+.filter-btn:hover { border-color: var(--primary); color: var(--primary); }
+
+.filter-btn.is-active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #ffffff;
+}
 
 .admin-table-wrap {
   background: var(--surface);

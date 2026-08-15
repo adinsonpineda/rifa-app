@@ -9,6 +9,7 @@ const logoutBtn = document.getElementById('logoutBtn');
 const adminStats = document.getElementById('adminStats');
 const adminStatus = document.getElementById('adminStatus');
 const searchInput = document.getElementById('searchInput');
+const filterGroup = document.getElementById('filterGroup');
 const participantsBody = document.getElementById('participantsBody');
 
 const tabParticipants = document.getElementById('tabParticipants');
@@ -25,6 +26,7 @@ const collaboratorsBody = document.getElementById('collaboratorsBody');
 const SESSION_KEY = 'rifaAdminKey';
 let participantsCache = [];
 let collaboratorsCache = [];
+let activeFilter = 'all';
 
 function getStoredKey() {
   return sessionStorage.getItem(SESSION_KEY) || '';
@@ -124,17 +126,25 @@ function renderStats(participants) {
 
 function renderTable(participants) {
   const term = (searchInput.value || '').trim().toLowerCase();
-  const filtered = term
-    ? participants.filter((p) => {
-        const num = String(p.number).padStart(3, '0');
-        return (
-          num.includes(term) ||
-          (p.name || '').toLowerCase().includes(term) ||
-          (p.phone || '').toLowerCase().includes(term) ||
-          (p.soldBy || '').toLowerCase().includes(term)
-        );
-      })
-    : participants;
+
+  let filtered = participants;
+  if (activeFilter === 'paid') {
+    filtered = filtered.filter((p) => p.paid);
+  } else if (activeFilter === 'pending') {
+    filtered = filtered.filter((p) => !p.paid);
+  }
+
+  if (term) {
+    filtered = filtered.filter((p) => {
+      const num = String(p.number).padStart(3, '0');
+      return (
+        num.includes(term) ||
+        (p.name || '').toLowerCase().includes(term) ||
+        (p.phone || '').toLowerCase().includes(term) ||
+        (p.soldBy || '').toLowerCase().includes(term)
+      );
+    });
+  }
 
   if (filtered.length === 0) {
     participantsBody.innerHTML = `<tr><td colspan="7"><div class="admin-empty">No hay resultados.</div></td></tr>`;
@@ -396,6 +406,17 @@ refreshAdminBtn.addEventListener('click', () => {
 });
 
 searchInput.addEventListener('input', () => renderTable(participantsCache));
+
+filterGroup.addEventListener('click', (e) => {
+  const btn = e.target.closest('.filter-btn');
+  if (!btn) return;
+
+  activeFilter = btn.dataset.filter;
+  filterGroup.querySelectorAll('.filter-btn').forEach((b) => {
+    b.classList.toggle('is-active', b === btn);
+  });
+  renderTable(participantsCache);
+});
 
 // Si ya habia una clave guardada en esta sesion del navegador, entra directo.
 if (getStoredKey()) {
