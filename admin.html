@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Rifa &mdash; Administrador</title>
+<meta name="robots" content="noindex, nofollow" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css" />
+<link rel="stylesheet" href="admin.css" />
+</head>
+<body>
+
+  <div class="admin-wrap">
+
+    <!-- Pantalla de acceso -->
+    <section id="loginSection" class="admin-login">
+      <h1 class="admin-login__title">Panel de administrador</h1>
+      <p class="admin-login__hint">Ingresa tu clave de administrador para continuar.</p>
+      <form id="loginForm" class="admin-login__form">
+        <input type="password" id="adminKeyInput" placeholder="Clave de administrador" autocomplete="current-password" required />
+        <button type="submit" class="primary-btn">Entrar</button>
+      </form>
+      <p id="loginError" class="modal__error" hidden></p>
+    </section>
+
+    <!-- Panel principal (oculto hasta iniciar sesion) -->
+    <section id="panelSection" class="admin-panel" hidden>
+      <div class="admin-panel__header">
+        <h1 class="admin-panel__title" id="panelTitle">Participantes</h1>
+        <div class="admin-panel__header-actions">
+          <button id="refreshAdminBtn" type="button" class="ghost-btn">Actualizar</button>
+          <button id="logoutBtn" type="button" class="ghost-btn">Cerrar sesión</button>
+        </div>
+      </div>
+
+      <div class="admin-tabs">
+        <button type="button" class="admin-tab is-active" id="tabParticipants" data-tab="participants">Participantes</button>
+        <button type="button" class="admin-tab" id="tabCollaborators" data-tab="collaborators">Colaboradores</button>
+      </div>
+
+      <!-- Vista: Participantes -->
+      <div id="participantsView">
+        <div class="admin-stats" id="adminStats"></div>
+
+        <div class="admin-toolbar">
+          <input type="text" id="searchInput" class="admin-search" placeholder="Buscar por número, nombre, teléfono o vendedor..." />
+          <div class="filter-group" id="filterGroup">
+            <button type="button" class="filter-btn is-active" data-filter="all">Todos</button>
+            <button type="button" class="filter-btn" data-filter="paid">Pagados</button>
+            <button type="button" class="filter-btn" data-filter="pending">Pendientes</button>
+          </div>
+        </div>
+
+        <p id="adminStatus" class="status-message"></p>
+
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>N&deg;</th>
+                <th>Nombre</th>
+                <th>Teléfono</th>
+                <th>Vendido por</th>
+                <th>Apartado</th>
+                <th>Estado</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="participantsBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Vista: Colaboradores -->
+      <div id="collaboratorsView" hidden>
+        <form id="newCollaboratorForm" class="admin-inline-form">
+          <input type="text" id="newCollaboratorName" placeholder="Nombre del colaborador" required />
+          <button type="submit" class="primary-btn">Agregar colaborador</button>
+        </form>
+
+        <p id="collaboratorsStatus" class="status-message"></p>
+
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Enlace de venta</th>
+                <th>Estado</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="collaboratorsBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </div>
+
+<script src="admin.js"></script>
+</body>
+</html>
